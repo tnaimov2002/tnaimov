@@ -14,8 +14,8 @@ from aiogram.fsm.context import FSMContext
 
 # ==== BOT TOKEN va ADMIN ID-ni ====
 BOT_TOKEN = "8075927150:AAFLN1UaCMjRnPIZ8TkERrjXWhCBlVOydzM"   # token
-ADMIN_ID = 2034173364                # Telegram ID
-CHANNEL_LINK = "https://t.me/test_bot_bytnaimov"  # Kanal havolasi
+ADMIN_ID = 143688902                # Telegram ID
+CHANNEL_LINK = "https://t.me/thekhaitov"  # Kanal havolasi
 
 # Bot obyektini yaratamiz (3.7.0 ga mos)
 bot = Bot(
@@ -36,7 +36,7 @@ async def cmd_start(message: Message, state: FSMContext):
     await message.answer(
         "👋 Salom! Sizni <b>Khaitov Online Academy</b> botiga xush kelibsiz.\n\n"
         "Iltimos, <b>ism-familyangizni</b> yuboring.\n\n"
-        "Masalan: <i>Tulqinjon Naimov</i>"
+        
     )
     await state.set_state(RegForm.full_name)
 
@@ -125,4 +125,5 @@ if __name__ == "__main__":
         asyncio.run(main())
     except KeyboardInterrupt:
         print("⛔ Bot to‘xtadi.")
+
 
