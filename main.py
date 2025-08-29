@@ -34,7 +34,7 @@ class RegForm(StatesGroup):
 async def cmd_start(message: Message, state: FSMContext):
     await state.clear()
     await message.answer(
-        "👋 Salom! <b>Khaitov Online Academy</b> botiga xush kelibsiz.\n\n"
+        "👋 Salom! <b>Khaitov Online School</b> botiga xush kelibsiz.\n\n"
         "Iltimos, <b>ism-familyangizni</b> yuboring.\n\n"
         
     )
@@ -125,6 +125,7 @@ if __name__ == "__main__":
         asyncio.run(main())
     except KeyboardInterrupt:
         print("⛔ Bot to‘xtadi.")
+
 
 
 
