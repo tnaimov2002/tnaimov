@@ -35,7 +35,7 @@ async def cmd_start(message: Message, state: FSMContext):
     await state.clear()
     await message.answer(
         "👋 Salom! <b>Khaitov Online School</b> botiga xush kelibsiz.\n\n"
-        "Iltimos, <b>ism-familyangizni</b> yuboring.\n\n"
+        "Bepul darslik qo'lga kiritish uchun kontaktingizni qoldiring!👇</b> yuboring.\n\n"
         
     )
     await state.set_state(RegForm.full_name)
@@ -81,8 +81,8 @@ async def get_contact(message: Message, state: FSMContext):
     # Foydalanuvchiga kanal havolasini yuborish
     await message.answer(
         f"✅ Rahmat, {full_name}!\n\n"
-        f"Quyidagi havola orqali kanalimizga qo‘shilishingiz mumkin:\n\n"
-        f"{CHANNEL_LINK}",
+        f"Bepul darslikni tomosha qilib Mobilografiya sohasida o'z kuchingizni sinab ko'ring!\n\n"
+        f"{https://t.me/thekhaitov/580}",
         reply_markup=ReplyKeyboardRemove()
     )
 
@@ -125,6 +125,7 @@ if __name__ == "__main__":
         asyncio.run(main())
     except KeyboardInterrupt:
         print("⛔ Bot to‘xtadi.")
+
 
 
 
