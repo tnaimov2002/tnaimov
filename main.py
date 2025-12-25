@@ -12,7 +12,7 @@ from aiogram.types import (
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.context import FSMContext
 
-BOT_TOKEN = "TOKEN_BU_YERGA"
+BOT_TOKEN = "8075927150:AAEMrd_YNPCGVnKRVbvI3gP3cqodfSMnF-o"
 ADMIN_ID = 143688902
 CHANNEL_LINK = "https://t.me/thekhaitov/580"
 
@@ -82,3 +82,4 @@ async def main():
 
 if name == "__main__":
     asyncio.run(main())
+
