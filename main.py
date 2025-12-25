@@ -13,7 +13,7 @@ from aiogram.types import (
 )
 
 # ================== SOZLAMALAR ==================
-BOT_TOKEN = os.getenv("BOT_TOKEN") or "BU_YERGA_YANGI_TOKEN"
+BOT_TOKEN = os.getenv("BOT_TOKEN") or "8075927150:AAEMrd_YNPCGVnKRVbvI3gP3cqodfSMnF-o"
 ADMIN_ID = 143688902
 CHANNEL_LINK = "https://t.me/thekhaitov/580"
 # =================================================
@@ -68,3 +68,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
