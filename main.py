@@ -15,7 +15,6 @@ from aiogram.types import (
 # ================== SOZLAMALAR ==================
 BOT_TOKEN = os.getenv("BOT_TOKEN") or "8075927150:AAEMrd_YNPCGVnKRVbvI3gP3cqodfSMnF-o"
 
-# 👑 UCHTA ADMIN
 ADMIN_IDS = [
     2034173364,
     5909893805,
@@ -34,9 +33,14 @@ bot = Bot(
 )
 dp = Dispatcher()
 
+# 📦 FOYDALANUVCHILAR BAZASI (xotirada)
+USERS = set()
+
 # ================== /start ==================
 @dp.message(CommandStart())
 async def cmd_start(message: Message):
+    USERS.add(message.from_user.id)
+
     kb = ReplyKeyboardMarkup(
         keyboard=[[KeyboardButton(text="📱 Kontaktni yuborish", request_contact=True)]],
         resize_keyboard=True,
@@ -49,11 +53,12 @@ async def cmd_start(message: Message):
         reply_markup=kb
     )
 
-# ================== KONTAKTNI QABUL QILISH ==================
+# ================== KONTAKT ==================
 @dp.message(F.contact)
 async def get_contact(message: Message):
-    phone = message.contact.phone_number
+    USERS.add(message.from_user.id)
 
+    phone = message.contact.phone_number
     text = (
         "📥 <b>Yangi foydalanuvchi</b>\n\n"
         f"📱 Telefon: {phone}\n"
@@ -62,41 +67,83 @@ async def get_contact(message: Message):
         f"🔗 Username: @{message.from_user.username or 'yo‘q'}"
     )
 
-    # 🔁 UCHTA ADMINGA YUBORISH
     for admin_id in ADMIN_IDS:
         await bot.send_message(admin_id, text)
 
     await message.answer(
-        "✅ Rahmat!\n\n"
-        f"📚 Bepul darslik 👉 {CHANNEL_LINK}\n\n"
-        "🎥 Endi video material yuborishingiz mumkin.",
+        f"✅ Rahmat!\n\n📚 Bepul darslik 👉 {CHANNEL_LINK}",
         reply_markup=ReplyKeyboardRemove()
     )
 
-# ================== VIDEO QABUL QILISH ==================
-@dp.message(F.video)
-async def get_video(message: Message):
-    user = message.from_user
+# ================== ADMIN → BARCHAGA MATN ==================
+@dp.message(F.text & F.from_user.id.in_(ADMIN_IDS))
+async def admin_text_broadcast(message: Message):
+    sent = 0
+    for user_id in USERS:
+        try:
+            await bot.send_message(user_id, message.text)
+            sent += 1
+        except:
+            pass
 
-    caption_text = (
-        "🎬 <b>Yangi video yuborildi</b>\n\n"
-        f"👤 Ism: {user.full_name}\n"
-        f"🆔 Telegram ID: {user.id}\n"
-        f"🔗 Username: @{user.username or 'yo‘q'}"
+    await message.answer(f"✅ Xabar {sent} ta foydalanuvchiga yuborildi")
+
+# ================== ADMIN → BARCHAGA RASM ==================
+@dp.message(F.photo & F.from_user.id.in_(ADMIN_IDS))
+async def admin_photo_broadcast(message: Message):
+    photo_id = message.photo[-1].file_id
+
+    for user_id in USERS:
+        try:
+            await bot.send_photo(
+                user_id,
+                photo=photo_id,
+                caption=message.caption
+            )
+        except:
+            pass
+
+    await message.answer("✅ Rasm barcha foydalanuvchilarga yuborildi")
+
+# ================== ADMIN → BARCHAGA VIDEO ==================
+@dp.message(F.video & F.from_user.id.in_(ADMIN_IDS))
+async def admin_video_broadcast(message: Message):
+    for user_id in USERS:
+        try:
+            await bot.send_video(
+                user_id,
+                video=message.video.file_id,
+                caption=message.caption
+            )
+        except:
+            pass
+
+    await message.answer("✅ Video barcha foydalanuvchilarga yuborildi")
+
+# ================== FOYDALANUVCHI VIDEO → ADMINGA ==================
+@dp.message(F.video)
+async def user_video_to_admin(message: Message):
+    USERS.add(message.from_user.id)
+
+    user = message.from_user
+    caption = (
+        "🎬 <b>Yangi video</b>\n\n"
+        f"👤 {user.full_name}\n"
+        f"🆔 {user.id}\n"
+        f"🔗 @{user.username or 'yo‘q'}"
     )
 
     if message.caption:
-        caption_text += f"\n\n📝 Izoh:\n{message.caption}"
+        caption += f"\n\n📝 Izoh:\n{message.caption}"
 
-    # 🔁 UCHTA ADMINGA VIDEO YUBORISH
     for admin_id in ADMIN_IDS:
         await bot.send_video(
-            chat_id=admin_id,
-            video=message.video.file_id,
-            caption=caption_text
+            admin_id,
+            message.video.file_id,
+            caption=caption
         )
 
-    await message.answer("✅ Video qabul qilindi. Rahmat!")
+    await message.answer("✅ Video adminga yuborildi")
 
 # ================== BOTNI ISHGA TUSHIRISH ==================
 async def main():
